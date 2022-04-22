@@ -9,6 +9,11 @@ async def home():
     return {"Data": "Test"} 
 
 
+@app.get("/authenticated")
+async def authentication():
+    return is_authenticated()
+
+
 @app.get("/get-repos/{username}")
 async def get_user_repos(username: str):
     user = os.environ.get('GITHUB_USERNAME')
@@ -16,9 +21,6 @@ async def get_user_repos(username: str):
 
     return get_repos(username, user, token)
 
-@app.get("/authenticated")
-async def authentication():
-    return is_authenticated()
 
 @app.get("/get-info/{username}")
 async def get_user_info(username: str):
