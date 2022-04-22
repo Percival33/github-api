@@ -40,7 +40,7 @@ def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, L
             "RateLimit-Remaining": data.headers["X-RateLimit-Remaining"],
             "RateLimit-Reset": data.headers["X-RateLimit-Reset"]
         }
-        
+
     return response
 
 
@@ -78,6 +78,9 @@ def is_authenticated(user: str = None, token: str = None):
     
     r = requests.get(f'https://api.github.com/user', auth=(user, token))
 
+    if r.ok:
+        return {"Response": "is authenticated"}
+        
     return {"Response": "User not authenticated"}
 
 

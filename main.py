@@ -11,7 +11,9 @@ async def home():
 
 @app.get("/authenticated")
 async def authentication():
-    return is_authenticated()
+    user = os.environ.get('GITHUB_USERNAME')
+    token = os.environ.get('ALLEGRO_SUMMER_EXPERIENCE_2022')
+    return is_authenticated(user, token)
 
 
 @app.get("/get-repos/{username}")
