@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from typing import Dict, List, Union, Any, Optional
 import os
 import json
@@ -16,7 +16,7 @@ def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict
     langs = requests.get(link, auth=(user, token))
     if langs.ok:
         response['langs'] = langs.json()
-
+    
     return response
 
 
@@ -27,15 +27,12 @@ def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, L
     
     if data.ok:
         for repo in data.json():
-            print(repo)
             repo_dict = {
                 'name': repo['name'],
                 'langs': get_langs(repo, user, token)['langs']
             }
 
             response['repos'].append(repo_dict)
-
-    print(response)
 
     return response
 
@@ -47,13 +44,14 @@ def get_info(username: str, user: str = None, token: str = None):
 
     if data.ok:
         data = data.json()
-        response['login'] = (data['login'])
-        response['name'] = (data['name'])
-        response['bio'] = (data['bio'])
+        response['login'] = data['login']
+        response['name'] = data['name']
+        response['bio'] = data['bio']
         response['repos'] = get_repos(username, user, token)['repos']
     else:
-        response = {"Error": "No such user exists"}
-        raise HTTPException(status_code=404)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No such user exists')
+    
+    
     return response
 
 
