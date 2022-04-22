@@ -33,7 +33,14 @@ def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, L
             }
 
             response['repos'].append(repo_dict)
-
+        
+        response['meta'] = {
+            "RateLimit-Limit": data.headers["X-RateLimit-Limit"],
+            "RateLimit-Used": data.headers["X-RateLimit-Used"],
+            "RateLimit-Remaining": data.headers["X-RateLimit-Remaining"],
+            "RateLimit-Reset": data.headers["X-RateLimit-Reset"]
+        }
+        
     return response
 
 
@@ -43,15 +50,22 @@ def get_info(username: str, user: str = None, token: str = None):
     response = {}
 
     if data.ok:
-        data = data.json()
-        response['login'] = data['login']
-        response['name'] = data['name']
-        response['bio'] = data['bio']
+        response['login'] = data.json()['login']
+        response['name'] = data.json()['name']
+        response['bio'] = data.json()['bio']
         response['repos'] = get_repos(username, user, token)['repos']
+
+        response['meta'] = {
+            "RateLimit-Limit": data.headers["X-RateLimit-Limit"],
+            "RateLimit-Used": data.headers["X-RateLimit-Used"],
+            "RateLimit-Remaining": data.headers["X-RateLimit-Remaining"],
+            "RateLimit-Reset": data.headers["X-RateLimit-Reset"]
+        }
+
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No such user exists')
     
-    
+
     return response
 
 
