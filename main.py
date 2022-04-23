@@ -9,7 +9,14 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"response": "/"}
+    return {"response": "/",
+            "meta": {
+                "limit": 0,
+                "remaining": 0,
+                "reset": 0,
+                "used": 0,
+            }
+    }
 
 @app.get("/api/info")
 def info():
