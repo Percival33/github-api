@@ -79,9 +79,11 @@ def is_authenticated(user: str = None, token: str = None):
     r = requests.get(f'https://api.github.com/user', auth=(user, token))
 
     if r.ok:
-        return {"Response": "is authenticated"}
-        
-    return {"Response": "User not authenticated"}
+        return True
+
+    else:
+        # TODO: raise HTTPException/detailed response
+        return False
 
 
 if __name__ == '__main__':
