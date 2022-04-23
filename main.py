@@ -7,6 +7,10 @@ from config import settings
 
 app = FastAPI()
 
+@app.get('/')
+def home():
+    return {"response": "/"}
+
 @app.get("/info")
 def info():
     return {"response": 

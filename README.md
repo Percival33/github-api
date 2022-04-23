@@ -8,7 +8,7 @@ My email in recruitment process: [marcin.jarc@gmail.com](mailto:marcin.jarc@gmai
 
 #### Goal
 
-Task was to create API which returns specific data about github user.
+Task was to create API which returns specific data about github user using [Github REST API](https://docs.github.com/en/rest).
 I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project.
 
 ## Installation
@@ -16,29 +16,57 @@ I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project.
 You need to have python3 installed on your machine. Firstly, clone the repo:
 
 ```bash
-$ git clone https://github.com/Percival33/allegro-summer-experience-2022.git
+  git clone https://github.com/Percival33/allegro-summer-experience-2022.git
 ```
 
 Change directory to folder with code. Then create new virtual environment `env` and activate it. If you don't have this package use this [link](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) to install it.
 
 ```bash
-$ python3 -m venv env
-$ source env/bin/activate
+ cd allegro-summer-experience-2022-main
+ python3 -m venv env
+ source env/bin/activate
 ```
+
+Now you should see (env) next to prompt symbol (usually `$` sign for normal user).
 
 Install dependencies and you're ready to go!
 
 ```bash
-(env)$ pip install -r requirements.txt
+  pip install -r requirements.txt
 ```
 
-Now you just need to run server locally
+Now you just need to run server locally.
 
 ```bash
-(env)$ uvicorn main:app
+  uvicorn main:app
 ```
 
-### TODO
+Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)!
+
+## Usage
+
+To avoid rate limit for unauthorized user from Github API, authenticate using `/auth` or create `credentials.json`. See [creating credentials](#github-api-authorization).
+
+1. One option is to go to [/docs](http://127.0.0.1:8000/docs) and use Swagger UI to use API
+
+2. Other one is to make requests to endpoints in your favourite way
+
+## API Reference
+
+### Github API authorization
+
+To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, Github username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. To be automaticaly authorized create `credentials.json` file structured like this:
+
+```json
+{
+  "user": "your github username",
+  "token": "personal_access_token"
+}
+```
+
+If at any moment you want to make unauthorized request, call `/logout` endpoint and make wanted request. After that every request will be unauthorized.
+
+## TODO
 
 - [ ] add specification section
 - [ ] add examples of usage
