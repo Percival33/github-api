@@ -4,6 +4,10 @@ import os
 import json
 import requests
 
+HEADERS = {
+    "Accept": "application/vnd.github.v3+json"
+}
+
 def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict[str, Optional[Dict[str, int]]]:
     response = {'langs': None}
     
@@ -13,7 +17,7 @@ def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict
         print(err)
         return response 
     
-    langs = requests.get(link, auth=(user, token))
+    langs = requests.get(link, auth=(user, token), headers=HEADERS)
     if langs.ok:
         response['langs'] = langs.json()
     
@@ -21,7 +25,7 @@ def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict
 
 
 def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, List[Any]]:
-    data = requests.get(f'https://api.github.com/users/{username}/repos', auth=(user, token))
+    data = requests.get(f'https://api.github.com/users/{username}/repos', auth=(user, token), headers=HEADERS)
 
     response = {'repos': []}
     
@@ -45,7 +49,7 @@ def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, L
 
 
 def get_info(username: str, user: str = None, token: str = None):
-    data = requests.get(f'https://api.github.com/users/{username}', auth=(user, token))
+    data = requests.get(f'https://api.github.com/users/{username}', auth=(user, token), headers=HEADERS)
 
     response = {}
 
@@ -69,14 +73,14 @@ def get_info(username: str, user: str = None, token: str = None):
     return response
 
 
-def save_to_json(filename: str, res: str):
+def save_to_json(filename: str, res):
     with open(f'{filename}.json', 'w') as f:
         json.dump(res, f, indent=2)
 
 
 def is_authenticated(user: str = None, token: str = None):
     
-    r = requests.get(f'https://api.github.com/user', auth=(user, token))
+    r = requests.get(f'https://api.github.com/user', auth=(user, token), headers=HEADERS)
 
     if r.ok:
         return True
