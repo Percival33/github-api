@@ -62,7 +62,7 @@ Every correct endpoint returns JSON response structured like this:
     "limit": "[int]",
     "remaining": "[int]",
     "reset": "[UTC epoch seconds]",
-    "used": "[int]",
+    "used": "[int]"
   }
 }
 ```
@@ -157,7 +157,7 @@ or (returns HTTP `401` code)
 Logout
 
 ```
-  Get /api/auth
+  GET /api/auth
 ```
 
 | Parameter | Type   | Description                                                                                                         |
@@ -273,7 +273,7 @@ To increase your rate limit to 5000 requests per hour, authentication is needed.
 
 ```json
 {
-  "user": "your github username",
+  "user": "your_github_username",
   "token": "personal_access_token"
 }
 ```
@@ -282,7 +282,7 @@ If at any moment you want to make unauthorized request, call `/logout` endpoint 
 
 ## TODO
 
-- [ ] add specification section
+- [x] add specification section
 - [x] add examples of usage
 - [x] create authentication endpoint
 - [x] add specific error messages (bad authentication, resource not found, exceeding rate limit)
