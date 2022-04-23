@@ -46,23 +46,41 @@ def info():
 def is_authentication(response: Response):
     res, meta = is_authenticated(settings.user, settings.token)
     if res:
-        return {"response": "User is authenticated",
-                "meta": meta
-                }
+        return {
+            "response": "User is authenticated",
+            "meta": meta
+        }
+
+    if int(meta["remaining"]) == 0:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {
+            "response": "Github API rate limit exceeded",
+            "meta": meta
+        }
 
     response.status_code = status.HTTP_401_UNAUTHORIZED
-    return {"response": "Requires authentication",
-            "meta": meta
+    return {
+        "response": "Requires authentication",
+        "meta": meta
     }
 
 
 @app.post("/api/auth")
-def get_authenticated(auth: Optional[Auth] = None):
+def get_authenticated(response: Response, auth: Optional[Auth] = None):
     settings.user = settings.token = None
 
     if auth is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Requires authentication")
-    
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return {
+            "response": "Requires authentication",
+            "meta": {
+                "limit": 0,
+                "remaining": 0,
+                "reset": 0,
+                "used": 0
+            }
+        }
+
     res, meta = is_authenticated(auth.user, auth.token)
 
     if res:
@@ -73,7 +91,12 @@ def get_authenticated(auth: Optional[Auth] = None):
             "meta": meta
         }
     
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Bad credentials")
+    response.status_code = status.HTTP_401_UNAUTHORIZED
+    return {
+        "response": "Bad credentials",
+        "meta": meta
+    }
+
 
 @app.get("/api/logout")
 def logout(response: Response):
@@ -89,13 +112,18 @@ def logout(response: Response):
     return Response(status_code=HTTPStatus.NOT_MODIFIED.value)
 
 @app.get("/api/get-repos/{username}")
-def get_user_repos(username: str):
-    return get_repos(username, settings.user, settings.token)
+def get_user_repos(username: str, response: Response):
+    res, code = get_repos(username, settings.user, settings.token)
+    response.status_code = code
 
+    return res
 
 @app.get("/api/get-info/{username}")
-def get_user_info(username: str):
-    return get_info(username, settings.user, settings.token)
+def get_user_info(username: str, response: Response):
+    res, code = get_info(username, settings.user, settings.token)
+    response.status_code = code
+
+    return res
 
 @app.get("/api/about")
 def about():

@@ -53,8 +53,6 @@ To avoid rate limit for unauthorized user from Github API, authenticate using `/
 
 ## API Reference
 
-#### Get info
-
 Every correct endpoint returns JSON response structured like this:
 
 ```json
@@ -70,13 +68,16 @@ Every correct endpoint returns JSON response structured like this:
 ```
 
 While endpoints about this API, holds zeros in meta field.
-Errors are returning:
 
-```json
-{
-  "detail": "Specific error information"
-}
-```
+| Status code | Description                                        |
+| :---------: | :------------------------------------------------- |
+|    `304`    | Returned when logged out as unauthorized user      |
+|    `401`    | Returned when no credentials or invalid are passed |
+|    `403`    | Returned when Github API rate limit is hit         |
+|    `404`    | Returned when no data is found                     |
+|    `200`    | Returned in all other situations                   |
+
+- ### Get info
 
 ```http
   GET /api/info
@@ -86,7 +87,7 @@ Errors are returning:
 | :-------- | :----- | :--------------------------- |
 | `None`    | `None` | Returns available endpoints. |
 
-#### Check if authenticated
+- ### Check if authenticated
 
 ```http
   GET /api/is_auth
@@ -96,7 +97,7 @@ Errors are returning:
 | :-------- | :----- | :------------------------------------------------------------------- |
 | `None`    | `None` | Returns if user is authenticated. <br /> See `response` for details. |
 
-#### Authenticate
+- ### Authenticate
 
 ```http
   POST /api/auth
@@ -129,7 +130,13 @@ or (returns HTTP `401` code)
 
 ```json
 {
-  "detail": "Bad credentials"
+  "response": "Requires authentication",
+  "meta": {
+    "limit": 0,
+    "remaining": 0,
+    "reset": 0,
+    "used": 0
+  }
 }
 ```
 
@@ -137,7 +144,13 @@ or (returns HTTP `401` code)
 
 ```json
 {
-  "detail": "Requires authentication"
+  "response": "Bad credentials",
+  "meta": {
+    "limit": "60",
+    "remaining": "0",
+    "reset": "1650757085",
+    "used": "60"
+  }
 }
 ```
 
@@ -165,7 +178,7 @@ Example output:
 }
 ```
 
-#### Get users repos
+- ### Get user's repos
 
 ```http
   GET /api/get-repos/{username}
@@ -204,11 +217,57 @@ Example output:
 }
 ```
 
-### Return codes
+- ### Get user's info
 
-TODO!
+```http
+  GET /api/get-info/{username}
+```
 
-### Github API authorization
+| Parameter  | Type     | Description                                                                                 |
+| :--------- | :------- | :------------------------------------------------------------------------------------------ |
+| `username` | `string` | Returns a list of repos with used languages and number of bytes written using this language |
+
+Example output:
+
+```json
+{
+  "response": {
+    "login": "percival313",
+    "name": null,
+    "bio": null,
+    "repos": []
+  },
+  "meta": {}
+}
+```
+
+- ### API about
+
+```http
+  GET /api/about
+```
+
+| Parameter | Type   | Description                              |
+| :-------- | :----- | :--------------------------------------- |
+| `None`    | `None` | Returns simplified information about API |
+
+Example output:
+
+```json
+{
+  "app_name": "Allegro Summer Experience 2022",
+  "created_by": "Marcin Jarczewski",
+  "admin_email": "marcin.jarc@gmail.com",
+  "meta": {
+    "limit": 0,
+    "remaining": 0,
+    "reset": 0,
+    "used": 0
+  }
+}
+```
+
+## Github API authorization
 
 To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, Github username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. To be automaticaly authorized create `credentials.json` file structured like this:
 
@@ -224,10 +283,10 @@ If at any moment you want to make unauthorized request, call `/logout` endpoint 
 ## TODO
 
 - [ ] add specification section
-- [ ] add examples of usage
-- [ ] create authentication endpoint
+- [x] add examples of usage
+- [x] create authentication endpoint
 - [x] add specific error messages (bad authentication, resource not found, exceeding rate limit)
-- [ ] add exceeded rate limit error
+- [x] add exceeded rate limit error
 - [ ] type hinting
-- [ ] fix is_authenticated fucntion
+- [x] fix is_authenticated fucntion
 - [x] add user authentication
