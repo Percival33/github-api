@@ -59,10 +59,10 @@ Every correct endpoint returns JSON response structured like this:
 {
   "response": {},
   "meta": {
-    "limit": int,
-    "remaining": int,
-    "reset": UTC epoch seconds,
-    "used": int,
+    "limit": "[int]",
+    "remaining": "[int]",
+    "reset": "[UTC epoch seconds]",
+    "used": "[int]",
   }
 }
 ```
@@ -79,7 +79,7 @@ While endpoints about this API, holds zeros in meta field.
 
 - ### Get info
 
-```http
+```
   GET /api/info
 ```
 
@@ -89,7 +89,7 @@ While endpoints about this API, holds zeros in meta field.
 
 - ### Check if authenticated
 
-```http
+```
   GET /api/is_auth
 ```
 
@@ -99,7 +99,7 @@ While endpoints about this API, holds zeros in meta field.
 
 - ### Authenticate
 
-```http
+```
   POST /api/auth
 ```
 
@@ -156,7 +156,7 @@ or (returns HTTP `401` code)
 
 Logout
 
-```http
+```
   Get /api/auth
 ```
 
@@ -180,7 +180,7 @@ Example output:
 
 - ### Get user's repos
 
-```http
+```
   GET /api/get-repos/{username}
 ```
 
@@ -219,7 +219,7 @@ Example output:
 
 - ### Get user's info
 
-```http
+```
   GET /api/get-info/{username}
 ```
 
@@ -243,7 +243,7 @@ Example output:
 
 - ### API about
 
-```http
+```
   GET /api/about
 ```
 
