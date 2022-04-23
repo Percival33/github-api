@@ -20,30 +20,38 @@ def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict
     langs = requests.get(link, auth=(user, token), headers=HEADERS)
     if langs.ok:
         response['langs'] = langs.json()
-    
+        response['meta'] = {
+            "limit": langs.headers["X-RateLimit-Limit"],
+            "remaining": langs.headers["X-RateLimit-Remaining"],
+            "reset": langs.headers["X-RateLimit-Reset"],
+            "used": langs.headers["X-RateLimit-Used"]
+        }
+
     return response
 
 
 def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, List[Any]]:
     data = requests.get(f'https://api.github.com/users/{username}/repos', auth=(user, token), headers=HEADERS)
 
-    response = {'repos': []}
-    
+    response = {
+        "response": {'repos': []}
+    }
+
+    meta = {}
+
     if data.ok:
         for repo in data.json():
+            tmp = get_langs(repo, user, token)
+            meta = tmp['meta']
+
             repo_dict = {
                 'name': repo['name'],
-                'langs': get_langs(repo, user, token)['langs']
+                'langs': tmp['langs']
             }
 
-            response['repos'].append(repo_dict)
+            response["response"]['repos'].append(repo_dict)
         
-        response['meta'] = {
-            "RateLimit-Limit": data.headers["X-RateLimit-Limit"],
-            "RateLimit-Used": data.headers["X-RateLimit-Used"],
-            "RateLimit-Remaining": data.headers["X-RateLimit-Remaining"],
-            "RateLimit-Reset": data.headers["X-RateLimit-Reset"]
-        }
+        response['meta'] = meta
 
     return response
 
@@ -51,20 +59,16 @@ def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, L
 def get_info(username: str, user: str = None, token: str = None):
     data = requests.get(f'https://api.github.com/users/{username}', auth=(user, token), headers=HEADERS)
 
-    response = {}
+    response = {"response": {}}
 
     if data.ok:
-        response['login'] = data.json()['login']
-        response['name'] = data.json()['name']
-        response['bio'] = data.json()['bio']
-        response['repos'] = get_repos(username, user, token)['repos']
+        response["response"]['login'] = data.json()['login']
+        response["response"]['name'] = data.json()['name']
+        response["response"]['bio'] = data.json()['bio']
+        tmp = get_repos(username, user, token)
+        response["response"]['repos'] = tmp['repos']
 
-        response['meta'] = {
-            "RateLimit-Limit": data.headers["X-RateLimit-Limit"],
-            "RateLimit-Used": data.headers["X-RateLimit-Used"],
-            "RateLimit-Remaining": data.headers["X-RateLimit-Remaining"],
-            "RateLimit-Reset": data.headers["X-RateLimit-Reset"]
-        }
+        response['meta'] = tmp['meta']
 
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No such user exists')
@@ -82,12 +86,19 @@ def is_authenticated(user: str = None, token: str = None):
     
     r = requests.get(f'https://api.github.com/user', auth=(user, token), headers=HEADERS)
 
+    meta = {
+        "limit": r.headers["X-RateLimit-Limit"],
+        "remaining": r.headers["X-RateLimit-Remaining"],
+        "reset": r.headers["X-RateLimit-Reset"],
+        "used": r.headers["X-RateLimit-Used"]
+    }
+
     if r.ok:
-        return True
+        return True, meta
 
     else:
         # TODO: raise HTTPException/detailed response
-        return False
+        return False, meta
 
 
 if __name__ == '__main__':

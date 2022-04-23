@@ -53,6 +53,52 @@ To avoid rate limit for unauthorized user from Github API, authenticate using `/
 
 ## API Reference
 
+#### Get info
+
+Every response is structured like this:
+
+```json
+{
+  "response": {},
+  "meta": {
+    "limit": int,
+    "remaining": int,
+    "reset": UTC epoch seconds,
+    "used": int,
+  }
+}
+```
+
+While endpoints about this API, holds zeros in meta field.
+
+```http
+  GET /api/info
+```
+
+| Parameter | Type   | Description                 |
+| :-------- | :----- | :-------------------------- |
+| `None`    | `None` | Returns available endpoints |
+
+#### Check if authenticated
+
+```http
+  GET /api/is_auth
+```
+
+| Parameter | Type   | Description |
+| :-------- | :----- | :---------- |
+| `None`    | `None` |             |
+
+#### Get authenticated
+
+```http
+  POST /api/auth
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of item to fetch |
+
 ### Github API authorization
 
 To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, Github username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. To be automaticaly authorized create `credentials.json` file structured like this:
