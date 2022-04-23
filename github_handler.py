@@ -59,14 +59,21 @@ def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, L
 def get_info(username: str, user: str = None, token: str = None):
     data = requests.get(f'https://api.github.com/users/{username}', auth=(user, token), headers=HEADERS)
 
-    response = {"response": {}}
+    meta = {
+        "limit": data.headers["X-RateLimit-Limit"],
+        "remaining": data.headers["X-RateLimit-Remaining"],
+        "reset": data.headers["X-RateLimit-Reset"],
+        "used": data.headers["X-RateLimit-Used"]
+    }
+    response = {"response": {}, "meta": meta}
 
     if data.ok:
         response["response"]['login'] = data.json()['login']
         response["response"]['name'] = data.json()['name']
         response["response"]['bio'] = data.json()['bio']
         tmp = get_repos(username, user, token)
-        response["response"]['repos'] = tmp['repos']
+        # print(tmp)
+        response["response"]['repos'] = tmp['response']['repos']
 
         response['meta'] = tmp['meta']
 

@@ -55,7 +55,7 @@ To avoid rate limit for unauthorized user from Github API, authenticate using `/
 
 #### Get info
 
-Every response is structured like this:
+Every correct endpoint returns JSON response structured like this:
 
 ```json
 {
@@ -70,14 +70,21 @@ Every response is structured like this:
 ```
 
 While endpoints about this API, holds zeros in meta field.
+Errors are returning:
+
+```json
+{
+  "detail": "Specific error information"
+}
+```
 
 ```http
   GET /api/info
 ```
 
-| Parameter | Type   | Description                 |
-| :-------- | :----- | :-------------------------- |
-| `None`    | `None` | Returns available endpoints |
+| Parameter | Type   | Description                  |
+| :-------- | :----- | :--------------------------- |
+| `None`    | `None` | Returns available endpoints. |
 
 #### Check if authenticated
 
@@ -85,19 +92,121 @@ While endpoints about this API, holds zeros in meta field.
   GET /api/is_auth
 ```
 
-| Parameter | Type   | Description |
-| :-------- | :----- | :---------- |
-| `None`    | `None` |             |
+| Parameter | Type   | Description                                                          |
+| :-------- | :----- | :------------------------------------------------------------------- |
+| `None`    | `None` | Returns if user is authenticated. <br /> See `response` for details. |
 
-#### Get authenticated
+#### Authenticate
 
 ```http
   POST /api/auth
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+| Parameter | Type     | Description                              |
+| :-------- | :------- | :--------------------------------------- |
+| `user`    | `string` | Github username used for authentication  |
+| `token`   | `string` | Github personal token for authentication |
+
+```
+Both are sent via HTTP POST data
+```
+
+Example outputs:
+
+```json
+{
+  "response": "User authenticated successfully",
+  "meta": {
+    "limit": "5000",
+    "remaining": "4948",
+    "reset": "1650732749",
+    "used": "52"
+  }
+}
+```
+
+or (returns HTTP `401` code)
+
+```json
+{
+  "detail": "Bad credentials"
+}
+```
+
+or (returns HTTP `401` code)
+
+```json
+{
+  "detail": "Requires authentication"
+}
+```
+
+Logout
+
+```http
+  Get /api/auth
+```
+
+| Parameter | Type   | Description                                                                                                         |
+| :-------- | :----- | :------------------------------------------------------------------------------------------------------------------ |
+| `None`    | `None` | Sets user credentials to `None`. <br />Returns HTTP code `304` and empty response if credentials are already `None` |
+
+Example output:
+
+```json
+{
+  "response": "Logged out successfully",
+  "meta": {
+    "limit": 0,
+    "remaining": 0,
+    "reset": 0,
+    "used": 0
+  }
+}
+```
+
+#### Get users repos
+
+```http
+  GET /api/get-repos/{username}
+```
+
+| Parameter  | Type     | Description                                                                                 |
+| :--------- | :------- | :------------------------------------------------------------------------------------------ |
+| `username` | `string` | Returns a list of repos with used languages and number of bytes written using this language |
+
+Example output:
+
+```json
+{
+  "response": {
+    "repos": [
+      {
+        "name": "FH-GreenCar-site",
+        "langs": {
+          "HTML": 31760,
+          "CSS": 15212,
+          "JavaScript": 1058
+        }
+      },
+      {
+        "name": "fridge-explorer",
+        "langs": {}
+      }
+    ]
+  },
+  "meta": {
+    "limit": "60",
+    "remaining": "44",
+    "reset": "1650732773",
+    "used": "16"
+  }
+}
+```
+
+### Return codes
+
+TODO!
 
 ### Github API authorization
 

@@ -77,10 +77,14 @@ def get_authenticated(auth: Optional[Auth] = None):
 
 @app.get("/api/logout")
 def logout(response: Response):
-    res, meta = is_authenticated(settings.user, settings.token)
-    if res:
+    if settings.user is not None and settings.token is not None:
         settings.user = settings.token = None
-        return {"response": "Logged out successfully", "meta": meta}
+        return {"response": "Logged out successfully", "meta": {
+            "limit": 0,
+            "remaining": 0,
+            "reset": 0,
+            "used": 0,
+        }}
 
     return Response(status_code=HTTPStatus.NOT_MODIFIED.value)
 
