@@ -19,10 +19,10 @@ You need to have python3 installed on your machine. Firstly, clone the repo:
 $ git clone https://github.com/Percival33/allegro-summer-experience-2022.git
 ```
 
-Then create new virtualenv `env` and activate it.
+Change directory to folder with code. Then create new virtual environment `env` and activate it. If you don't have this package use this [link](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) to install it.
 
 ```bash
-$ python3 -m virtualenv env
+$ python3 -m venv env
 $ source env/bin/activate
 ```
 
