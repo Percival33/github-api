@@ -2,6 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class Auth(BaseModel):
+class Authentication(BaseModel):
     user: Optional[str] = None
     token: Optional[str] = None

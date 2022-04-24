@@ -51,7 +51,7 @@ deactivate
 
 ## Usage
 
-To avoid rate limit for unauthorized user from Github API, authenticate using `/auth` or create `credentials.json`. See [creating credentials](#github-api-authorization).
+To avoid rate limit for unauthorized user from Github API, authenticate by creating `credentials.json`. See [creating credentials](#github-api-authorization).
 
 1. One option is to go to [/docs](http://127.0.0.1:8000/docs) and use Swagger UI to use API
 
@@ -73,7 +73,7 @@ Every correct endpoint returns JSON response structured like this:
 }
 ```
 
-While endpoints about this API, holds zeros in meta field.
+While endpoints which do not make request to Github API, holds zeros in meta fields.
 
 | Status code | Description                                        |
 | :---------: | :------------------------------------------------- |
@@ -83,195 +83,7 @@ While endpoints about this API, holds zeros in meta field.
 |    `404`    | Returned when no data is found                     |
 |    `200`    | Returned in all other situations                   |
 
-- ### Get info
-
-```
-  GET /api/info
-```
-
-| Parameter | Type   | Description                  |
-| :-------- | :----- | :--------------------------- |
-| `None`    | `None` | Returns available endpoints. |
-
-- ### Check if authenticated
-
-```
-  GET /api/is_auth
-```
-
-| Parameter | Type   | Description                                                          |
-| :-------- | :----- | :------------------------------------------------------------------- |
-| `None`    | `None` | Returns if user is authenticated. <br /> See `response` for details. |
-
-- ### Authenticate
-
-```
-  POST /api/auth
-```
-
-| Parameter | Type     | Description                              |
-| :-------- | :------- | :--------------------------------------- |
-| `user`    | `string` | Github username used for authentication  |
-| `token`   | `string` | Github personal token for authentication |
-
-```
-Both are sent via HTTP POST data
-```
-
-Example outputs:
-
-```json
-{
-  "response": "User authenticated successfully",
-  "meta": {
-    "limit": "5000",
-    "remaining": "4948",
-    "reset": "1650732749",
-    "used": "52"
-  }
-}
-```
-
-or (returns HTTP `401` code)
-
-```json
-{
-  "response": "Requires authentication",
-  "meta": {
-    "limit": 0,
-    "remaining": 0,
-    "reset": 0,
-    "used": 0
-  }
-}
-```
-
-or (returns HTTP `401` code)
-
-```json
-{
-  "response": "Bad credentials",
-  "meta": {
-    "limit": "60",
-    "remaining": "0",
-    "reset": "1650757085",
-    "used": "60"
-  }
-}
-```
-
-Logout
-
-```
-  GET /api/auth
-```
-
-| Parameter | Type   | Description                                                                                                         |
-| :-------- | :----- | :------------------------------------------------------------------------------------------------------------------ |
-| `None`    | `None` | Sets user credentials to `None`. <br />Returns HTTP code `304` and empty response if credentials are already `None` |
-
-Example output:
-
-```json
-{
-  "response": "Logged out successfully",
-  "meta": {
-    "limit": 0,
-    "remaining": 0,
-    "reset": 0,
-    "used": 0
-  }
-}
-```
-
-- ### Get user's repos
-
-```
-  GET /api/get-repos/{username}
-```
-
-| Parameter  | Type     | Description                                                                                 |
-| :--------- | :------- | :------------------------------------------------------------------------------------------ |
-| `username` | `string` | Returns a list of repos with used languages and number of bytes written using this language |
-
-Example output:
-
-```json
-{
-  "response": {
-    "repos": [
-      {
-        "name": "FH-GreenCar-site",
-        "langs": {
-          "HTML": 31760,
-          "CSS": 15212,
-          "JavaScript": 1058
-        }
-      },
-      {
-        "name": "fridge-explorer",
-        "langs": {}
-      }
-    ]
-  },
-  "meta": {
-    "limit": "60",
-    "remaining": "44",
-    "reset": "1650732773",
-    "used": "16"
-  }
-}
-```
-
-- ### Get user's info
-
-```
-  GET /api/get-info/{username}
-```
-
-| Parameter  | Type     | Description                                                                                 |
-| :--------- | :------- | :------------------------------------------------------------------------------------------ |
-| `username` | `string` | Returns a list of repos with used languages and number of bytes written using this language |
-
-Example output:
-
-```json
-{
-  "response": {
-    "login": "percival313",
-    "name": null,
-    "bio": null,
-    "repos": []
-  },
-  "meta": {}
-}
-```
-
-- ### API about
-
-```
-  GET /api/about
-```
-
-| Parameter | Type   | Description                              |
-| :-------- | :----- | :--------------------------------------- |
-| `None`    | `None` | Returns simplified information about API |
-
-Example output:
-
-```json
-{
-  "app_name": "Allegro Summer Experience 2022",
-  "created_by": "Marcin Jarczewski",
-  "admin_email": "marcin.jarc@gmail.com",
-  "meta": {
-    "limit": 0,
-    "remaining": 0,
-    "reset": 0,
-    "used": 0
-  }
-}
-```
+To take a look on full documentation about API, you can get it at [/docs](http://127.0.0.1:8000/docs)
 
 ## Github API authorization
 
@@ -284,15 +96,8 @@ To increase your rate limit to 5000 requests per hour, authentication is needed.
 }
 ```
 
-If at any moment you want to make unauthorized request, call `/logout` endpoint and make wanted request. After that every request will be unauthorized.
+and restart server.
 
-## TODO
+## TODO (in future)
 
-- [x] add specification section
-- [x] add examples of usage
-- [x] create authentication endpoint
-- [x] add specific error messages (bad authentication, resource not found, exceeding rate limit)
-- [x] add exceeded rate limit error
-- [ ] type hinting
-- [x] fix is_authenticated fucntion
-- [x] add user authentication
+- [x] add tests

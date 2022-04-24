@@ -1,4 +1,5 @@
 from pydantic import BaseSettings
+from models.authentication import Authentication
 import json
 
 
@@ -7,8 +8,7 @@ class Settings(BaseSettings):
     author: str = "Marcin Jarczewski"
     admin_email: str = "marcin.jarc@gmail.com"
 
-    user: str = None
-    token: str = None
+    auth: Authentication = None
 
 
 settings = Settings()
@@ -16,8 +16,9 @@ settings = Settings()
 
 try:
     with open('credentials.json', 'r') as f:
-        auth = json.load(f)
-        settings.user = auth['user']
-        settings.token = auth['token']
+        credentials = json.load(f)
+        settings.auth = Authentication()
+        settings.auth.user = credentials['user']
+        settings.auth.token = credentials['token']
 except Exception as err:
     pass
