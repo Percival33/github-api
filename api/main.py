@@ -7,9 +7,12 @@ Allegro Summer Experience 2022
 
 ## Functionality
 
-- Get Repos for specific user with languages and number of bytes written in this language 
+- Get Repos for specific user with languages and number of bytes written in
+this language
 - Get login, name, bio and repos for specific user
-- See [README](https://github.com/Percival33/allegro-summer-experience-2022#usage) for detailed usage instructions
+- See
+ [README](https://github.com/Percival33/allegro-summer-experience-2022#usage)
+  for detailed usage instructions
 
 
 """
@@ -33,7 +36,7 @@ tags_metadata = [
     },
     {
         "name": "about",
-        "description": "Informations about creator of this API.",
+        "description": "Information about creator of this API.",
     },
 ]
 
@@ -73,7 +76,7 @@ def home():
 @app.get("/api/info", tags=["info"])
 def info():
     return {
-        "response": 
+        "response":
         {
             "Possible endpoints:": [
                 "GET  /",
@@ -90,12 +93,11 @@ def info():
             "used": 0,
         }
     }
-        
+
 
 @app.get("/api/get-repos/{username}", tags=["GithubAPI"])
 def get_user_repos(username: str):
     auth = None
-    
     if settings.auth is not None:
         auth = settings.auth
 
@@ -122,8 +124,7 @@ def get_user_info(username: str):
 
     if settings.auth is not None:
         auth = settings.auth
-        
-    github_handler = GithubHandler()    
+    github_handler = GithubHandler()
 
     return github_handler.get_info(username, auth)
 

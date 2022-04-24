@@ -19,7 +19,8 @@ class GithubHandler:
         if auth is None:
             r = requests.get(link, headers=headers)
         else:
-            r = requests.get(link, auth=(auth.user, auth.token), headers=headers)
+            r = requests.get(link, auth=(auth.user, auth.token),
+                             headers=headers)
 
         response["meta"] = {
             "limit": r.headers["X-RateLimit-Limit"],
@@ -34,7 +35,8 @@ class GithubHandler:
 
         # TODO: create custom exception
         if int(r.headers["X-RateLimit-Remaining"]) == 0:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Github API rate limit exceeded")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                                detail="Github API rate limit exceeded")
         if r.status_code == 401:
             # detail = "401"
             if auth is None:
@@ -42,19 +44,23 @@ class GithubHandler:
             else:
                 detail = "Bad credentials"
 
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail)
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=detail)
         if r.status_code == 404:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No such user exists")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="No such user exists")
 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
-    def update_meta(res: Dict[str, Any] = None, other_res: Dict[str, Any] = None):
+    def update_meta(res: Dict[str, Any] = None,
+                    other_res: Dict[str, Any] = None):
         try:
             res["meta"] = other_res["meta"]
         except KeyError:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                detail="Something went wrong! Please try again.")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Something went wrong! Please try again.")
 
         return res
 
@@ -115,7 +121,7 @@ class GithubHandler:
         return response
 
     def is_authenticated(self, auth: Optional[Authentication] = None):
-        r = self.make_request(f"https://api.github.com/user", auth)
+        r = self.make_request("https://api.github.com/user", auth)
         response = self.create_response()
         self.update_meta(response, r)
         response["response"] = "User authenticated"

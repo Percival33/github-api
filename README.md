@@ -99,12 +99,18 @@ To increase your rate limit to 5000 requests per hour, authentication is needed.
 
 and restart server.
 
-### Running tests
+### Running tests and checks
 
 To run tests, make sure you are in main directory and just type
 
 ```bash
-pytest
+  pytest
+```
+
+to run linter `flake8` type:
+
+```bash
+  flake8
 ```
 
 ## TODO (in future)
