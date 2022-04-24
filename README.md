@@ -43,6 +43,12 @@ Now you just need to run server locally.
 
 Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)!
 
+After using API, turn off `virtualenv` using:
+
+```bash
+deactivate
+```
+
 ## Usage
 
 To avoid rate limit for unauthorized user from Github API, authenticate using `/auth` or create `credentials.json`. See [creating credentials](#github-api-authorization).

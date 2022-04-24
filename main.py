@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Response, status
+from fastapi import FastAPI, Response, status
 from http import HTTPStatus
 from github_handler import get_info, get_repos, is_authenticated
 from models import Auth
@@ -7,23 +7,26 @@ from config import settings
 
 app = FastAPI()
 
+
 @app.get("/")
 def home():
-    return {"response": "/",
-            "meta": {
-                "limit": 0,
-                "remaining": 0,
-                "reset": 0,
-                "used": 0,
-            }
+    return {
+        "response": "/",
+        "meta": {
+            "limit": 0,
+            "remaining": 0,
+            "reset": 0,
+            "used": 0,
+        }
     }
+
 
 @app.get("/api/info")
 def info():
     return {
         "response": 
         {
-            "Possible endpoints:" : [
+            "Possible endpoints:": [
                 "GET  /",
                 "GET  /api/authenticated", 
                 "POST /api/auth",
@@ -99,31 +102,35 @@ def get_authenticated(response: Response, auth: Optional[Auth] = None):
 
 
 @app.get("/api/logout")
-def logout(response: Response):
+def logout():
     if settings.user is not None and settings.token is not None:
         settings.user = settings.token = None
-        return {"response": "Logged out successfully", "meta": {
-            "limit": 0,
-            "remaining": 0,
-            "reset": 0,
-            "used": 0,
-        }}
+        return {
+            "response": "Logged out successfully", 
+            "meta": {
+                "limit": 0,
+                "remaining": 0,
+                "reset": 0,
+                "used": 0,
+            }
+        }
 
     return Response(status_code=HTTPStatus.NOT_MODIFIED.value)
 
+
 @app.get("/api/get-repos/{username}")
 def get_user_repos(username: str, response: Response):
-    res, code = get_repos(username, settings.user, settings.token)
-    response.status_code = code
-
+    res, response.status_code = get_repos(username, settings.user, settings.token)
+   
     return res
+
 
 @app.get("/api/get-info/{username}")
 def get_user_info(username: str, response: Response):
-    res, code = get_info(username, settings.user, settings.token)
-    response.status_code = code
+    res, response.status_code = get_info(username, settings.user, settings.token)
 
     return res
+
 
 @app.get("/api/about")
 def about():

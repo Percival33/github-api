@@ -1,6 +1,5 @@
-from fastapi import HTTPException, status
-from typing import Dict, List, Union, Any, Optional
-import os
+from fastapi import status
+from typing import Dict, Any
 import json
 import requests
 
@@ -8,7 +7,8 @@ HEADERS = {
     "Accept": "application/vnd.github.v3+json"
 }
 
-def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict[str, Optional[Dict[str, int]]]:
+
+def get_langs(repo: Dict[str, Any], user: str = None, token: str = None):
     response = {
         "response": None,
         "meta": {
@@ -35,7 +35,7 @@ def get_langs(repo: Dict[str, Any], user: str = None, token: str = None) -> Dict
     return response, langs.status_code
 
 
-def get_repos(username: str, user: str = None, token: str = None) -> Dict[str, List[Any]]:
+def get_repos(username: str, user: str = None, token: str = None):
     data = requests.get(f'https://api.github.com/users/{username}/repos', auth=(user, token), headers=HEADERS)
 
     response_code = 200
@@ -132,18 +132,3 @@ def is_authenticated(user: str = None, token: str = None):
 
     else:
         return False, meta
-
-
-if __name__ == "__main__":
-    username = input("Input username to get user's data: ")
-    
-    user = os.environ.get('GITHUB_USERNAME')
-    token = os.environ.get('ALLEGRO_SUMMER_EXPERIENCE_2022')
-
-    print(is_authenticated(user, token))
-
-    res = get_repos(username, user, token)
-    save_to_json('repos', res)
-    
-    general_info = get_info(username, user, token)
-    save_to_json('info', general_info)
