@@ -3,6 +3,7 @@ from .models.authentication import Authentication
 import json
 import os
 
+
 def get_credentials():
     auth = Authentication()
 

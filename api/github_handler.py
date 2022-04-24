@@ -5,23 +5,22 @@ import json
 import requests
 
 
-class GithubHandler():
+class GithubHandler:
     def __init__(self) -> None:
         pass
 
-    def make_request(self, link: str, auth: Optional[Authentication] = None) \
-    -> Dict[Dict[str, Any], Dict[str, Any]]:
-        
+    def make_request(self, link: str, auth: Optional[Authentication] = None):
+
         response = self.create_response()
         headers = {
             "Accept": "application/vnd.github.v3+json"
         }
-        
+
         if auth is None:
             r = requests.get(link, headers=headers)
         else:
             r = requests.get(link, auth=(auth.user, auth.token), headers=headers)
-            
+
         response["meta"] = {
             "limit": r.headers["X-RateLimit-Limit"],
             "remaining": r.headers["X-RateLimit-Remaining"],
@@ -33,12 +32,11 @@ class GithubHandler():
             response["response"] = r.json()
             return response
 
-
-        #TODO: create custom exception
+        # TODO: create custom exception
         if int(r.headers["X-RateLimit-Remaining"]) == 0:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Github API rate limit exceeded")
         if r.status_code == 401:
-            detail = "401"
+            # detail = "401"
             if auth is None:
                 detail = "Requires authentication"
             else:
@@ -50,19 +48,18 @@ class GithubHandler():
 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
-
-    #TODO: change to static method?
-    def update_meta(self, res: Dict[str, Any] = None, other_res: Dict[str, Any] = None):
+    @staticmethod
+    def update_meta(res: Dict[str, Any] = None, other_res: Dict[str, Any] = None):
         try:
             res["meta"] = other_res["meta"]
         except KeyError:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Something went wrong! Please try again.")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail="Something went wrong! Please try again.")
 
         return res
 
-
-    #TODO: change to static method?
-    def create_response(self):
+    @staticmethod
+    def create_response():
         response = {
             "response": "",
             "meta": {
@@ -75,8 +72,7 @@ class GithubHandler():
 
         return response
 
-
-    def get_repos(self, username: str, auth: Optional [Authentication] = None):
+    def get_repos(self, username: str, auth: Optional[Authentication] = None):
         link = f'https://api.github.com/users/{username}/repos'
         r = self.make_request(link, auth)
 
@@ -97,16 +93,15 @@ class GithubHandler():
             }
 
             response["response"]["repos"].append(repo_dict)
-        
-        return response
 
+        return response
 
     def get_info(self, username: str, auth: Optional[Authentication] = None):
         link = f'https://api.github.com/users/{username}'
         r = self.make_request(link, auth)
-       
+
         response = self.create_response()
-        response["response"] = {}
+        response["response"] = dict()
         self.update_meta(response, r)
 
         response["response"]["login"] = r["response"]["login"]
@@ -119,7 +114,6 @@ class GithubHandler():
 
         return response
 
-
     def is_authenticated(self, auth: Optional[Authentication] = None):
         r = self.make_request(f"https://api.github.com/user", auth)
         response = self.create_response()
@@ -127,7 +121,6 @@ class GithubHandler():
         response["response"] = "User authenticated"
 
         return response
-
 
     @staticmethod
     def save_to_json(filename: str, res):

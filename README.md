@@ -8,7 +8,7 @@ My email in recruitment process: [marcin.jarc@gmail.com](mailto:marcin.jarc@gmai
 
 #### Goal
 
-Task was to create API which returns specific data about github user using [Github REST API](https://docs.github.com/en/rest).
+Task was to create API which returns specific data about GitHub user using [GitHub REST API](https://docs.github.com/en/rest).
 I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project.
 
 ## Installation
@@ -51,7 +51,7 @@ deactivate
 
 ## Usage
 
-To avoid rate limit for unauthorized user from Github API, authenticate by creating `credentials.json`. See [creating credentials](#github-api-authorization).
+To avoid rate limit for unauthorized user from GitHub API, authenticate by creating `credentials.json`. See [creating credentials](#github-api-authorization).
 
 1. One option is to go to [/docs](http://127.0.0.1:8000/docs) and use Swagger UI to use API
 
@@ -73,21 +73,22 @@ Every correct endpoint returns JSON response structured like this:
 }
 ```
 
-While endpoints which do not make request to Github API, holds zeros in meta fields.
+While endpoints which do not make request to GitHub API, holds zeros in meta fields.
 
-| Status code | Description                                        |
-| :---------: | :------------------------------------------------- |
-|    `304`    | Returned when logged out as unauthorized user      |
-|    `401`    | Returned when no credentials or invalid are passed |
-|    `403`    | Returned when Github API rate limit is hit         |
-|    `404`    | Returned when no data is found                     |
-|    `200`    | Returned in all other situations                   |
+| Status code | Description                                         |
+|:-----------:|:----------------------------------------------------|
+|    `304`    | Returned when logged out as unauthorized user       |
+|    `401`    | Returned when no credentials or invalid are passed  |
+|    `403`    | Returned when Github API rate limit is hit          |
+|    `404`    | Returned when no data is found                      |
+|    `500`    | Returned when api or Github API has internal errors |
+|    `200`    | Returned in all other situations                    |
 
 To take a look on full documentation about API, you can get it at [/docs](http://127.0.0.1:8000/docs)
 
-## Github API authorization
+## GitHub API authorization
 
-To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, Github username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. To be automaticaly authorized create `credentials.json` file structured like this:
+To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, GitHub username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. To be automatically authorized create `credentials.json` file structured like this:
 
 ```json
 {

@@ -1,7 +1,6 @@
 from fastapi import HTTPException
 from api.github_handler import GithubHandler
 from api.config import Settings
-from api.main import app
 import pytest
 
 

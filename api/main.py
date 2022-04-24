@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .github_handler import GithubHandler
-from .config import Settings, get_credentials
+from .config import Settings
 
 description = """
 Allegro Summer Experience 2022
@@ -52,6 +52,7 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 settings = Settings()
+
 
 @app.get("/", tags=["home"])
 def home():
