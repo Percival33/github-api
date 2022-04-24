@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from api.main import app
 from api.config import Settings
 
+
 client = TestClient(app)
 
 
@@ -10,7 +11,7 @@ def test_main_home():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {
-        "response": "/",
+        "response": "It works!",
         "meta": {
             "limit": 0,
             "remaining": 0,

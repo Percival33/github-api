@@ -103,6 +103,18 @@ def get_user_repos(username: str):
     return github_handler.get_repos(username, auth)
 
 
+@app.get("/api/get-repos/{username}", tags=["GithubAPI"])
+def is_authenticated():
+    auth = None
+
+    if settings.auth is not None:
+        auth = settings.auth
+
+    github_handler = GithubHandler()
+
+    return github_handler.is_authenticated(auth)
+
+
 @app.get("/api/get-info/{username}", tags=["GithubAPI"])
 def get_user_info(username: str):
     auth = None

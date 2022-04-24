@@ -38,21 +38,28 @@ class GithubHandler():
         if int(r.headers["X-RateLimit-Remaining"]) == 0:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Github API rate limit exceeded")
         if r.status_code == 401:
-            #TODO: add details bad credentials/requires authentication
-            raise HTTPException(status_code=status.HTTP_401_REQUIRES_AUTHENTICATION, detail="401")
+            detail = "401"
+            if auth is None:
+                detail = "Requires authentication"
+            else:
+                detail = "Bad credentials"
+
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail)
         if r.status_code == 404:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No such user exists")
 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
 
     #TODO: change to static method?
     def update_meta(self, res: Dict[str, Any] = None, other_res: Dict[str, Any] = None):
         try:
             res["meta"] = other_res["meta"]
         except KeyError:
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Something went wrong! Plese try again")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Something went wrong! Please try again.")
 
         return res
+
 
     #TODO: change to static method?
     def create_response(self):
@@ -122,6 +129,7 @@ class GithubHandler():
         return response
 
 
-    def save_to_json(self, filename: str, res):
+    @staticmethod
+    def save_to_json(filename: str, res):
         with open(f'{filename}.json', 'w') as f:
             json.dump(res, f, indent=2)
