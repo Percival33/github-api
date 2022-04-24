@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from typing import Dict, Any, Optional
-from models.authentication import Authentication
+from .models.authentication import Authentication
 import json
 import requests
 
@@ -9,16 +9,19 @@ class GithubHandler():
     def __init__(self) -> None:
         pass
 
-
-    def make_request(self, link: str, auth: Optional[Authentication] = None) -> Dict[Dict[str, Any], Dict[str, Any]]:
+    def make_request(self, link: str, auth: Optional[Authentication] = None) \
+    -> Dict[Dict[str, Any], Dict[str, Any]]:
         
         response = self.create_response()
         headers = {
             "Accept": "application/vnd.github.v3+json"
         }
-
-        r = requests.get(link, auth=(auth.user, auth.token), headers=headers)
         
+        if auth is None:
+            r = requests.get(link, headers=headers)
+        else:
+            r = requests.get(link, auth=(auth.user, auth.token), headers=headers)
+            
         response["meta"] = {
             "limit": r.headers["X-RateLimit-Limit"],
             "remaining": r.headers["X-RateLimit-Remaining"],
@@ -43,7 +46,7 @@ class GithubHandler():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
 
     #TODO: change to static method?
-    def update_meta(self, res, other_res):
+    def update_meta(self, res: Dict[str, Any] = None, other_res: Dict[str, Any] = None):
         try:
             res["meta"] = other_res["meta"]
         except KeyError:
@@ -79,7 +82,7 @@ class GithubHandler():
 
         for repo in r["response"]:
             langs = self.make_request(repo["languages_url"], auth)
-            self.update_meta(r, langs)
+            self.update_meta(response, langs)
 
             repo_dict = {
                 "name": repo["name"],

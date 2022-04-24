@@ -1,6 +1,23 @@
 from pydantic import BaseSettings
-from models.authentication import Authentication
+from .models.authentication import Authentication
 import json
+import os
+
+def get_credentials():
+    auth = Authentication()
+
+    absolute_path = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(absolute_path, "credentials.json")
+
+    try:
+        with open(file_path, "r") as f:
+            credentials = json.load(f)
+            auth.user = credentials["user"]
+            auth.token = credentials["token"]
+    except Exception as err:
+        print(err)
+    finally:
+        return auth
 
 
 class Settings(BaseSettings):
@@ -8,17 +25,4 @@ class Settings(BaseSettings):
     author: str = "Marcin Jarczewski"
     admin_email: str = "marcin.jarc@gmail.com"
 
-    auth: Authentication = None
-
-
-settings = Settings()
-
-
-try:
-    with open('credentials.json', 'r') as f:
-        credentials = json.load(f)
-        settings.auth = Authentication()
-        settings.auth.user = credentials['user']
-        settings.auth.token = credentials['token']
-except Exception as err:
-    pass
+    auth: Authentication = get_credentials()
