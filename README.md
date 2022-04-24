@@ -35,9 +35,10 @@ Install dependencies and you're ready to go!
   pip install -r requirements.txt
 ```
 
-Now you just need to run server locally.
+Now you just need to run server locally. Go to `api` directory
 
 ```bash
+  cd api
   uvicorn main:app
 ```
 
@@ -100,4 +101,4 @@ and restart server.
 
 ## TODO (in future)
 
-- [x] add tests
+- [ ] add tests
