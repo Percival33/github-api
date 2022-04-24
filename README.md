@@ -38,8 +38,7 @@ Install dependencies and you're ready to go!
 Now you just need to run server locally. Go to `api` directory
 
 ```bash
-  cd api
-  uvicorn main:app
+  uvicorn api.main:app
 ```
 
 Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)!
@@ -99,6 +98,14 @@ To increase your rate limit to 5000 requests per hour, authentication is needed.
 
 and restart server.
 
+### Running tests
+
+To run tests, make sure you are in main directory and just type
+
+```bash
+pytest
+```
+
 ## TODO (in future)
 
-- [ ] add tests
+- [ ] add more sophisticated tests
