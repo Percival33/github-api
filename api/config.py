@@ -15,8 +15,6 @@ def get_credentials():
             credentials = json.load(f)
             auth.user = credentials["user"]
             auth.token = credentials["token"]
-    except Exception as err:
-        print(err)
     finally:
         return auth
 

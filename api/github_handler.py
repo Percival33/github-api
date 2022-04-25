@@ -6,21 +6,20 @@ import requests
 
 
 class GithubHandler:
+    headers = {
+        "Accept": "application/vnd.github.v3+json"
+    }
+
     def __init__(self) -> None:
         pass
 
     def make_request(self, link: str, auth: Optional[Authentication] = None):
-
         response = self.create_response()
-        headers = {
-            "Accept": "application/vnd.github.v3+json"
-        }
-
         if auth is None:
-            r = requests.get(link, headers=headers)
+            r = requests.get(link, headers=self.headers)
         else:
             r = requests.get(link, auth=(auth.user, auth.token),
-                             headers=headers)
+                             headers=self.headers)
 
         response["meta"] = {
             "limit": r.headers["X-RateLimit-Limit"],
@@ -33,12 +32,10 @@ class GithubHandler:
             response["response"] = r.json()
             return response
 
-        # TODO: create custom exception
         if int(r.headers["X-RateLimit-Remaining"]) == 0:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                                 detail="Github API rate limit exceeded")
         if r.status_code == 401:
-            # detail = "401"
             if auth is None:
                 detail = "Requires authentication"
             else:

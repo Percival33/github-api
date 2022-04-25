@@ -59,9 +59,6 @@ settings = Settings()
 
 @app.get("/", tags=["home"])
 def home():
-    """
-        hehe
-    """
     return {
         "response": "It works!",
         "meta": {
@@ -106,7 +103,7 @@ def get_user_repos(username: str):
     return github_handler.get_repos(username, auth)
 
 
-@app.get("/api/get-repos/{username}", tags=["GithubAPI"])
+@app.get("/api/is-authenticated", tags=["GithubAPI"])
 def is_authenticated():
     auth = None
 
