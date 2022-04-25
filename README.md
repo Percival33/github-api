@@ -9,7 +9,7 @@ My email in recruitment process: [marcin.jarc@gmail.com](mailto:marcin.jarc@gmai
 #### Goal
 
 Task was to create API which returns specific data about GitHub user using [GitHub REST API](https://docs.github.com/en/rest).
-I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project. <br/> I assumed this API will be only used on local machine, so every made request is authorized with Github credentials (if present).
+I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project. I assumed this API will be only used on local machine, so every request made is authorized with Github credentials (if present).
 
 ## Installation
 
