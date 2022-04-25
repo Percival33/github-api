@@ -91,7 +91,6 @@ While endpoints which do not make request to GitHub API, holds zeros in meta fie
 
 | Status code | Description                                            |
 | :---------: | :----------------------------------------------------- |
-|    `304`    | Returned when logged out as unauthorized user          |
 |    `401`    | Returned when no credentials or invalid are passed     |
 |    `403`    | Returned when Github API rate limit is hit             |
 |    `404`    | Returned when no data is found                         |
