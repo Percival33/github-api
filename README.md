@@ -13,7 +13,7 @@ I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project. <br/>
 
 ## Installation
 
-You need to have python3 installed on your machine. Firstly, clone the repo:
+You need to have [python3](https://wiki.python.org/moin/BeginnersGuide/Download) and [pip](https://pip.pypa.io/en/stable/installation/#get-pip-py) installed on your machine. Firstly, clone the repo:
 
 ```bash
   git clone https://github.com/Percival33/allegro-summer-experience-2022.git
@@ -22,7 +22,7 @@ You need to have python3 installed on your machine. Firstly, clone the repo:
 Change directory to folder with code. Then create new virtual environment `env` and activate it. If you don't have this package use this [link](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) to install it.
 
 ```bash
- cd allegro-summer-experience-2022-main
+ cd allegro-summer-experience-2022
  python3 -m venv env
  source env/bin/activate
 ```
@@ -41,7 +41,21 @@ Now you just need to run server locally. Go to `api` directory
   uvicorn api.main:app
 ```
 
-Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)!
+Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)! ([localhost:8000](http://localhost:8000) should also work).
+
+If everything goes correctly after navigating `localhost:8000` , this is what you should see on screen to make sure everything has been setup correctly.
+
+```json
+{
+  "response": "It works!",
+  "meta": {
+    "limit": 0,
+    "remaining": 0,
+    "reset": 0,
+    "used": 0
+  }
+}
+```
 
 After using API, turn off `virtualenv` using:
 
@@ -67,7 +81,7 @@ Every correct endpoint returns JSON response structured like this:
   "meta": {
     "limit": "[int]",
     "remaining": "[int]",
-    "reset": "[UTC epoch seconds]",
+    "reset": "[UTC epoch time in seconds]",
     "used": "[int]"
   }
 }
@@ -75,20 +89,20 @@ Every correct endpoint returns JSON response structured like this:
 
 While endpoints which do not make request to GitHub API, holds zeros in meta fields.
 
-| Status code | Description                                         |
-| :---------: | :-------------------------------------------------- |
-|    `304`    | Returned when logged out as unauthorized user       |
-|    `401`    | Returned when no credentials or invalid are passed  |
-|    `403`    | Returned when Github API rate limit is hit          |
-|    `404`    | Returned when no data is found                      |
-|    `500`    | Returned when api or Github API has internal errors |
-|    `200`    | Returned in all other situations                    |
+| Status code | Description                                              |
+| :---------: | :------------------------------------------------------- |
+|    `304`    | Returned when logged out as unauthorized user            |
+|    `401`    | Returned when no credentials or invalid are passed       |
+|    `403`    | Returned when Github API rate limit is hit               |
+|    `404`    | Returned when no data is found                           |
+|    `500`    | Returned when this api or Github API has internal errors |
+|    `200`    | Returned in all other situations                         |
 
 To take a look on full documentation about API, you can get it at [/docs](http://127.0.0.1:8000/docs)
 
 ## GitHub API authorization
 
-To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, GitHub username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. To be automatically authorized create `credentials.json` file structured like this:
+To increase your rate limit to 5000 requests per hour, authentication is needed. To do so, GitHub username and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) are needed. Your token does not require any authorizations. To be automatically authorized create `credentials.json` file structured like this:
 
 ```json
 {
@@ -101,18 +115,22 @@ and restart server.
 
 ### Running tests and checks
 
-To run tests, make sure you are in main directory and just type
+To run tests or linter, make sure you are in main directory and just type:
+
+**Make sure `env` is still enabled**.
+
+- run tests
 
 ```bash
   pytest
 ```
 
-to run linter `flake8` type:
+- to run linter `flake8` type:
 
 ```bash
   flake8
 ```
 
-## TODO (in future)
+## TODO (in the future)
 
-- [ ] add more sophisticated tests
+- [ ] add more complex tests

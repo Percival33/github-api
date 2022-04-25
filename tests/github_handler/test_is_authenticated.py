@@ -1,6 +1,6 @@
+from api.models.authentication import Authentication
 from fastapi import HTTPException
 from api.github_handler import GithubHandler
-from api.config import Settings
 import pytest
 
 
@@ -15,11 +15,13 @@ def test_no_credentials():
 
 def test_bad_credentials():
     github_handler = GithubHandler()
-    settings = Settings()
-    settings.auth.token = ""
+    auth = Authentication()
+
+    auth.user = "percival33"
+    auth.token = ""
 
     with pytest.raises(HTTPException) as exc:
-        github_handler.is_authenticated(settings.auth)
+        github_handler.is_authenticated(auth)
     assert exc.type == HTTPException
     assert exc.value.status_code == 401
     assert exc.value.detail == "Bad credentials"
