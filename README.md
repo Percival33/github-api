@@ -89,14 +89,14 @@ Every correct endpoint returns JSON response structured like this:
 
 While endpoints which do not make request to GitHub API, holds zeros in meta fields.
 
-| Status code | Description                                              |
-| :---------: | :------------------------------------------------------- |
-|    `304`    | Returned when logged out as unauthorized user            |
-|    `401`    | Returned when no credentials or invalid are passed       |
-|    `403`    | Returned when Github API rate limit is hit               |
-|    `404`    | Returned when no data is found                           |
-|    `500`    | Returned when this api or Github API has internal errors |
-|    `200`    | Returned in all other situations                         |
+| Status code | Description                                            |
+| :---------: | :----------------------------------------------------- |
+|    `304`    | Returned when logged out as unauthorized user          |
+|    `401`    | Returned when no credentials or invalid are passed     |
+|    `403`    | Returned when Github API rate limit is hit             |
+|    `404`    | Returned when no data is found                         |
+|    `500`    | Returned when this API or Github API are not available |
+|    `200`    | Returned in all other situations                       |
 
 To take a look on full documentation about API, you can get it at [/docs](http://127.0.0.1:8000/docs)
 
@@ -115,7 +115,7 @@ and restart server.
 
 ### Running tests and checks
 
-To run tests or linter, make sure you are in main directory and just type:
+To run tests or linter, make sure you are in main directory, installed `requirements.txt` and just type:
 
 **Make sure `env` is still enabled**.
 
@@ -128,9 +128,11 @@ To run tests or linter, make sure you are in main directory and just type:
 - to run linter `flake8` type:
 
 ```bash
-  flake8
+  flake8 api/
+  flake8 tests/
 ```
 
 ## TODO (in the future)
 
-- [ ] add more complex tests
+- [ ] add unit tests
+- [ ] add API tests
