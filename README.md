@@ -128,8 +128,7 @@ To run tests or linter, make sure you are in main directory, installed `requirem
 - to run linter `flake8` type:
 
 ```bash
-  flake8 api/
-  flake8 tests/
+  flake8 --exclude env/
 ```
 
 ## TODO (in the future)
