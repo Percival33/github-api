@@ -41,7 +41,7 @@ Now you just need to run server locally.
   uvicorn api.main:app
 ```
 
-Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)! ([localhost:8000](http://localhost:8000) should also work).
+Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)!
 
 If everything goes correctly after navigating `localhost:8000` , this is what you should see on screen to make sure everything has been setup correctly.
 
