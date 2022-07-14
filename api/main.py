@@ -3,7 +3,7 @@ from .github_handler import GithubHandler
 from .config import Settings
 
 description = """
-Allegro Summer Experience 2022
+Github API
 
 ## Functionality
 
@@ -11,7 +11,7 @@ Allegro Summer Experience 2022
 this language
 - Get login, name, bio and repos for specific user
 - See
- [README](https://github.com/Percival33/allegro-summer-experience-2022#usage)
+ [README](https://github.com/Percival33/github-api#usage)
   for detailed usage instructions
 
 
@@ -41,7 +41,7 @@ tags_metadata = [
 ]
 
 app = FastAPI(
-    title="Allegro Summer Experience 2022 API",
+    title="Github API",
     description=description,
     version="0.0.1",
     contact={
