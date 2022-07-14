@@ -1,45 +1,36 @@
-# allegro-summer-experience-2022
+# Github API
 
 ## About
 
-This is recruitment task for `Allegro Summer Experience 2022 internship`.
-
-My email in recruitment process: [marcin.jarc@gmail.com](mailto:marcin.jarc@gmail.com)
-
-#### Goal
+> *This is a former recruitment task for devops intern position.*
 
 Task was to create API which returns specific data about GitHub user using [GitHub REST API](https://docs.github.com/en/rest).
 I've used [FastAPI](https://fastapi.tiangolo.com/) to create this project. I assumed this API will be only used on local machine, so every request made is authorized with Github credentials (if present).
 
 ## Installation
 
-You need to have [python3](https://wiki.python.org/moin/BeginnersGuide/Download) and [pip](https://pip.pypa.io/en/stable/installation/#get-pip-py) installed on your machine. Firstly, clone the repo:
+1. You need to have [python3](https://wiki.python.org/moin/BeginnersGuide/Download) and [pip](https://pip.pypa.io/en/stable/installation/#get-pip-py) installed on your machine. Firstly, clone the repo.
 
-```bash
-  git clone https://github.com/Percival33/allegro-summer-experience-2022.git
-```
+2. Change directory to folder with code. Then create new virtual environment `env` and activate it. If you don't have this package use this [link](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) to install it.
 
-Change directory to folder with code. Then create new virtual environment `env` and activate it. If you don't have this package use this [link](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) to install it.
+    ```bash
+     python3 -m venv env
+     source env/bin/activate
+    ```
 
-```bash
- cd allegro-summer-experience-2022
- python3 -m venv env
- source env/bin/activate
-```
+    Now you should see (env) next to prompt symbol (usually `$` sign for normal user).
 
-Now you should see (env) next to prompt symbol (usually `$` sign for normal user).
+3. Install dependencies and you're ready to go!
 
-Install dependencies and you're ready to go!
+    ```bash
+      pip install -r requirements.txt
+    ```
 
-```bash
-  pip install -r requirements.txt
-```
+4. Start your server locally.
 
-Now you just need to run server locally.
-
-```bash
-  uvicorn api.main:app
-```
+    ```bash
+      uvicorn api.main:app
+    ```
 
 Server is available at [127.0.0.1:8000](http://127.0.0.1:8000)!
 
