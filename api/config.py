@@ -22,8 +22,8 @@ def get_credentials():
 
 
 class Settings(BaseSettings):
-    app_name: str = "Allegro Summer Experience 2022"
+    app_name: str = "Github API"
     author: str = "Marcin Jarczewski"
-    admin_email: str = "marcin.jarc@gmail.com"
+    admin_email: str = "admin@domain.com"
 
     auth: Authentication = get_credentials()
